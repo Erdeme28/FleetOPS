@@ -1,14 +1,8 @@
-.env
+\# FleetOPS
 
-\*.log
 
-target/
 
-build/
-
-.idea/
-
-.vscode/
+Cloud-native fleet management application using microservices.
 
 
 

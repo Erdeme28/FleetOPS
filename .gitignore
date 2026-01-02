@@ -1,0 +1,14 @@
+.env
+*.log
+
+# Java / Spring
+target/
+build/
+
+# Visual Studio Community 2022
+.vs/
+*.vcxproj.user
+*.suo
+
+# OS
+Thumbs.db
