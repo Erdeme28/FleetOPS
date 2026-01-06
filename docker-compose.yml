@@ -18,7 +18,7 @@ services:
 
   # 2. GATEWAY (Spring Boot) - 10p (REST API)
   gateway:
-    build: ./gateway-service  # Calea către folderul unde ai pus pom.xml
+    build: ./gateway_service  # Calea către folderul unde ai pus pom.xml
     container_name: gateway_container
     ports:
       - "8080:8080"
@@ -34,7 +34,7 @@ services:
 
   # 3. MICROSERVICIU RUTARE (C++) - 15p
   route-engine:
-    build: ./route-service
+    build: ./route_service
     container_name: route_engine_container
     ports:
       - "8081:8081"

@@ -6,5 +6,5 @@ RUN mkdir build && cd build && cmake .. && make
 
 FROM ubuntu:22.04
 WORKDIR /app
-COPY --from=build /app/build/route-service .
-CMD ["./route-service"]
+COPY --from=build /app/build/route_service .
+CMD ["./route_service"]
