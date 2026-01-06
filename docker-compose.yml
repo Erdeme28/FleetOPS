@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  # 1. BAZA DE DATE (Postgres) - 15p (Persistență)
+  db:
+    image: postgres:15
+    container_name: fleet_db_container
+    environment:
+      POSTGRES_DB: fleet_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"  # Expunem portul ca să poți vedea DB-ul și din IntelliJ (Database Tool)
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Păstrăm datele chiar dacă oprim containerul
+    networks:
+      - fleet-network
+
+  # 2. GATEWAY (Spring Boot) - 10p (REST API)
+  gateway:
+    build: ./gateway-service  # Calea către folderul unde ai pus pom.xml
+    container_name: gateway_container
+    ports:
+      - "8080:8080"
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      # Aici suprascriem URL-ul ca să fim siguri că vede 'db'
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/fleet_db
+    depends_on:
+      - db  # Așteaptă să pornească baza de date
+    networks:
+      - fleet-network
+
+  # 3. MICROSERVICIU RUTARE (C++) - 15p
+  route-engine:
+    build: ./route-service
+    container_name: route_engine_container
+    ports:
+      - "8081:8081"
+    networks:
+      - fleet-network
+
+  # 4. FRONTEND - 5p
+  frontend:
+    build: ./frontend
+    container_name: frontend_container
+    ports:
+      - "3000:80" # Mapăm portul 80 din container la 3000 pe PC-ul tău
+    networks:
+      - fleet-network
+
+volumes:
+  postgres_data:
+
+networks:
+  fleet-network:
+    driver: bridge

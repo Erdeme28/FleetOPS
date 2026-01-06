@@ -1,0 +1,7 @@
+body { margin: 0; padding: 0; display: flex; height: 100vh; font-family: sans-serif; }
+.container { display: flex; width: 100%; }
+.sidebar { width: 300px; padding: 20px; background: #f4f4f4; border-right: 1px solid #ccc; }
+#map { flex-grow: 1; height: 100vh; background: #e5e5e5; }
+input { display: block; margin-bottom: 10px; width: 90%; padding: 8px; }
+button { width: 95%; padding: 10px; background: #28a745; color: white; border: none; cursor: pointer; }
+button:hover { background: #218838; }
