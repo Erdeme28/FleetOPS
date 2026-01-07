@@ -1,0 +1,19 @@
+# --- SECRETE (CRITIC!) ---
+.env
+.env.local
+
+# --- IDE-uri (Nu le vrem pe GitHub) ---
+.idea/
+.vscode/
+*.iml
+
+# --- Sistem de Operare ---
+.DS_Store
+Thumbs.db
+
+# --- Build-uri locale (ca masura de siguranta suplimentara) ---
+target/
+build/
+node_modules/
+dist/
+__pycache__/
