@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      DB_NAME: ${{ secrets.DB_NAME }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Build Gateway (Maven)
+        working-directory: gateway_service
+        run: mvn compile
+
+      - name: Build Gateway Docker image
+        working-directory: gateway_service
+        run: docker build -t fleetops-gateway .
+
+      - name: Build Route Service Docker image
+        working-directory: route_service
+        run: docker build -t fleetops-route-service .

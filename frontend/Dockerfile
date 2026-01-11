@@ -1,11 +1,12 @@
-# Pasul 1: Alegem imaginea de bază
-# nginx:alpine este o versiune foarte mică și rapidă de Linux cu Nginx preinstalat
-FROM nginx:alpine
+FROM python:3.12-slim
 
-# Pasul 2: Copiem fișierele tale în container
-# Punctul "." înseamnă "tot ce e în folderul frontend de pe PC-ul meu"
-# Destinația "/usr/share/nginx/html" este locul standard de unde Nginx servește site-uri
-COPY . /usr/share/nginx/html
+WORKDIR /app
 
-# Pasul 3: Expunem portul (informativ)
-EXPOSE 80
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY app.py .
+
+EXPOSE 8501
+
+CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
