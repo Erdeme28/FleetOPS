@@ -17,9 +17,6 @@ public class Order {
     private String startLocation;
     private String endLocation;
 
-    private String status; // Ex: PENDING, IN_PROGRESS, COMPLETED
+    private String status;
 
-    // Putem lega comanda de un vehicul (optional pentru moment)
-    // @ManyToOne
-    // private Vehicle assignedVehicle;
 }

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "users") // "user" e cuvânt rezervat în Postgres, deci folosim "users"
+@Table(name = "users")
 @Data
 public class User {
     @Id
@@ -15,7 +15,7 @@ public class User {
     private String username;
 
     @Column(nullable = false)
-    private String password; // Aici va sta hash-ul (ex: $2a$10$Dk/...) nu parola text!
+    private String password;
 
-    private String role; // ADMIN, DRIVER, CLIENT
+    private String role;
 }

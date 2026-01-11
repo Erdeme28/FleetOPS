@@ -1,5 +1,6 @@
 package com.fleet.gateway.websocket;
 
+import com.fleet.gateway.entity.Order;
 import com.fleet.gateway.entity.Vehicle;
 import com.fleet.gateway.repository.VehicleRepository;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -20,6 +21,10 @@ public class WebSocketPublisher {
                               VehicleRepository vehicleRepository) {
         this.messagingTemplate = messagingTemplate;
         this.vehicleRepository = vehicleRepository;
+    }
+
+    public void send(String destination, Order order) {
+        messagingTemplate.convertAndSend(destination, order);
     }
 
     @Scheduled(fixedRate = 5000)

@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/vehicles")
-@CrossOrigin(origins = "*") // Permite accesul de pe Frontend (port 3000)
+@CrossOrigin(origins = "*")
 public class VehicleController {
 
     private final VehicleRepository vehicleRepository;
@@ -18,13 +18,13 @@ public class VehicleController {
         this.vehicleRepository = vehicleRepository;
     }
 
-    @Operation(summary = "Listeaza toate vehiculele", description = "Returneaza o lista cu toata flota si pozitiile curente.")
+    @Operation(summary = "List all vehicles", description = "Returns a list of all fleet and current positions.")
     @GetMapping
     public List<Vehicle> getAllVehicles() {
         return vehicleRepository.findAll();
     }
 
-    @Operation(summary = "Adauga un vehicul nou", description = "Creeaza un vehicul in baza de date.")
+    @Operation(summary = "Add a new vehicle", description = "Create a vehicle in db")
     @PostMapping
     public Vehicle createVehicle(@RequestBody Vehicle vehicle) {
         return vehicleRepository.save(vehicle);

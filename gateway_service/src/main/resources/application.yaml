@@ -5,31 +5,47 @@ spring:
   application:
     name: gateway-service
 
-  # --- BAZA DE DATE ---
-  # Aici Spring citeste variabilele setate in docker-compose.yml
-  # care la randul lor vin din fisierul secret .env
   datasource:
     url: ${SPRING_DATASOURCE_URL}
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
-  # --- JPA / HIBERNATE ---
   jpa:
     hibernate:
-      ddl-auto: update  # Creeaza/Actualizeaza automat tabelele in DB
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true # (Optional) Arata query-urile SQL in consola, util pentru debug
+      ddl-auto: update
     open-in-view: false
+    show-sql: true
 
-# --- OBSERVABILITATE (Actuator) ---
+  jackson:
+    serialization:
+      indent-output: true
+
+route-service:
+  url: ${ROUTE_SERVICE_URL}
+
+security:
+  jwt:
+    secret: ${JWT_SECRET}
+    expiration-ms: 3600000
+
 management:
   endpoints:
     web:
       exposure:
-        include: "*" # Expune toate endpoint-urile (health, metrics, beans, etc.)
+        include: "*"
   endpoint:
     health:
-      show-details: always # Arata detalii complete (stare DB, disc, ping)
+      show-details: always
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+
+logging:
+  level:
+    root: INFO
+    com.fleet.gateway: DEBUG
