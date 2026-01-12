@@ -15,4 +15,10 @@ WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Install netcat (used by wait-for-db script) and copy wait script
+RUN apt-get update && apt-get install -y curl netcat-openbsd && rm -rf /var/lib/apt/lists/*
+
+COPY wait-for-db.sh ./wait-for-db.sh
+RUN chmod +x ./wait-for-db.sh
+
+ENTRYPOINT ["sh", "-c", "./wait-for-db.sh && java -jar app.jar"]

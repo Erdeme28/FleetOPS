@@ -4,6 +4,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +17,8 @@ import java.io.IOException;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     private final JwtUtil jwtUtil;
     private final CustomUserDetailsService userDetailsService;
@@ -43,11 +47,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String authHeader = request.getHeader("Authorization");
 
+        logger.debug("Processing request: {} {}", request.getMethod(), request.getServletPath());
+        logger.debug("Authorization header: {}", authHeader != null ? "Present" : "Missing");
+
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
+            logger.debug("Extracted token (first 20 chars): {}", token.substring(0, Math.min(20, token.length())));
 
             if (jwtUtil.validateToken(token)) {
                 String username = jwtUtil.extractUsername(token);
+                logger.debug("Token valid for user: {}", username);
 
                 UserDetails userDetails =
                         userDetailsService.loadUserByUsername(username);
@@ -65,7 +74,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext()
                         .setAuthentication(authentication);
+
+                logger.debug("Authentication successful for user: {}", username);
+            } else {
+                logger.warn("Invalid JWT token");
             }
+        } else {
+            logger.debug("No Bearer token found in Authorization header");
         }
 
         filterChain.doFilter(request, response);
